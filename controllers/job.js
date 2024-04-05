@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const Job = require('../models/job.js');
+const Job = require('../models/Job.js');
  
  /** Middleware for verifying user */
 
