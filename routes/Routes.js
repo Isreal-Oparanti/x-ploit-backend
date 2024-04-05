@@ -1,7 +1,7 @@
 const express = require('express');
 const { register, login} = require('../controllers/AuthController.js');
 const { createJob, getAllJobs } = require('../controllers/job.js');
-const  localVariables  = require('../middleware/auth.js')
+ 
 const router = express.Router();
 
 router.post('/register', register);
