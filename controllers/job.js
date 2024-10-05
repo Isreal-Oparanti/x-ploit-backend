@@ -1,4 +1,4 @@
-const Job = require('../models/job.js');
+const Job = require('../models/Job.js');
 const User = require('../models/UserModel.js'); // Assuming you have a User model
 
 exports.createJob = async function (req, res) {
