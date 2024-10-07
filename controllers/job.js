@@ -13,19 +13,21 @@ exports.createJob = async function (req, res) {
     userId,
   } = req.body;
 
+  // Check if required fields are missing
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
-
-  // Check required fields
   if (!jobTitle || !description || !price || !amount || !startDate || !endDate) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
   try {
-    const user = await User.findById(userId);
+    // Log incoming data
+    console.log("Incoming job data:", req.body);
 
+    const user = await User.findById(userId);
     if (!user) {
+      console.log("User not found");
       return res.status(404).json({ error: "User not found" });
     }
 
@@ -47,8 +49,8 @@ exports.createJob = async function (req, res) {
 
     res.status(201).json(savedJob);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to create job" });
+    console.error("Error creating job:", err);  // Detailed error logging
+    res.status(500).json({ error: "Failed to create job", err });
   }
 };
 
