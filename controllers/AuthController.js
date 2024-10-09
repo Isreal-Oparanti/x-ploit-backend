@@ -3,7 +3,7 @@ const UserModel = require("../models/UserModel.js");
  
 const { OAuth2Client } = require('google-auth-library');
 
-const clientID = process.env.GOOGLE_CLIENT_ID; // Use environment variable for security
+const clientID =  "223799229324-6ue35s4ggqsdj7bct08qefaqbr280fig.apps.googleusercontent.com"
 const client = new OAuth2Client(clientID);
 
 async function verifyToken(token) {
