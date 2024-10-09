@@ -24,6 +24,8 @@ exports.googleLogin = async function (req, res) {
       audience: clientID,
     });
     const payload = ticket.getPayload();
+    const [firstname, ...lastnameArray] = payload.name.split(' ');
+    const lastname = lastnameArray.join(' ') || ''; 
 
     // Check if user exists in your DB
     let user = await UserModel.findOne({ email: payload.email });
