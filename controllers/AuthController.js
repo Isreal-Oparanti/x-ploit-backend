@@ -6,6 +6,50 @@ const jwt = require("jsonwebtoken");
 /** Middleware for verifying user */
 
 // Registering a new user
+const clientID = "223799229324-6ue35s4ggqsdj7bct08qefaqbr280fig.apps.googleusercontent.com"
+
+
+const express = require('express');
+const { OAuth2Client } = require('google-auth-library');
+ 
+const client = new OAuth2Client(clientID);
+
+exports.register = async function (req, res) {
+  const { idToken } = req.body;
+
+  try {
+    // Verify the token
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: clientID,
+    });
+    const payload = ticket.getPayload();
+
+    // Check if user exists in your DB
+    let user = await UserModel.findOne({ email: payload.email });
+    if (!user) {
+      // If user doesn't exist, create a new user
+      user = new User({
+        firstname,
+        lastname,
+        email: payload.email,
+        avatar: payload.picture,
+        googleId: payload.sub,  
+      });
+      await user.save()
+    }
+
+     
+    // Send the user data and token back to the frontend
+    res.json({ msg: "User Registered Successfully", user: user });
+  } catch (error) {
+    console.error("Error verifying Google ID token:", error);
+    res.status(401).json({ message: "Invalid Google token" });
+  }
+}
+
+ 
+
 exports.register = async function (req, res) {
   try {
     const { firstname, lastname, email, password, description, wallet } =
