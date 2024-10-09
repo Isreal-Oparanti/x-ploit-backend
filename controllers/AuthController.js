@@ -1,56 +1,50 @@
-// controllers/AuthController.js
-const bcrypt = require("bcrypt");
+ const bcrypt = require("bcrypt");
 const UserModel = require("../models/UserModel.js");
-const jwt = require("jsonwebtoken");
-
-/** Middleware for verifying user */
-
-// Registering a new user
-const clientID = "223799229324-6ue35s4ggqsdj7bct08qefaqbr280fig.apps.googleusercontent.com"
-
-
-const express = require('express');
-const { OAuth2Client } = require('google-auth-library');
  
+const { OAuth2Client } = require('google-auth-library');
+
+const clientID = process.env.GOOGLE_CLIENT_ID; // Use environment variable for security
 const client = new OAuth2Client(clientID);
+
+async function verifyToken(token) {
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: clientID,
+  });
+  return ticket.getPayload();
+}
 
 exports.googleLogin = async function (req, res) {
   const { idToken } = req.body;
 
   try {
     // Verify the token
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: clientID,
-    });
-    const payload = ticket.getPayload();
+    const payload = await verifyToken(idToken);
     const [firstname, ...lastnameArray] = payload.name.split(' ');
-    const lastname = lastnameArray.join(' ') || ''; 
+    const lastname = lastnameArray.join(' ') || '';
 
     // Check if user exists in your DB
     let user = await UserModel.findOne({ email: payload.email });
     if (!user) {
       // If user doesn't exist, create a new user
-      user = new User({
+      user = new UserModel({
         firstname,
         lastname,
         email: payload.email,
         avatar: payload.picture,
-        googleId: payload.sub,  
+        googleId: payload.sub,
       });
-      await user.save()
+      await user.save();
     }
 
-     
-    // Send the user data and token back to the frontend
+    // Send the user data back to the frontend
     res.json({ msg: "User Registered Successfully", user: user });
   } catch (error) {
     console.error("Error verifying Google ID token:", error);
     res.status(401).json({ message: "Invalid Google token" });
   }
-}
+};
 
- 
 
 exports.register = async function (req, res) {
   try {
