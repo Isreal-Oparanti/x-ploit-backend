@@ -14,7 +14,7 @@ const { OAuth2Client } = require('google-auth-library');
  
 const client = new OAuth2Client(clientID);
 
-exports.register = async function (req, res) {
+exports.googleLogin = async function (req, res) {
   const { idToken } = req.body;
 
   try {
