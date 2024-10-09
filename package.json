@@ -25,6 +25,7 @@
     "mongoose": "^7.6.7",
     "nodemailer": "^6.9.7",
     "nodemon": "^3.0.2",
-    "otp-generator": "^4.0.1"
+    "otp-generator": "^4.0.1",
+   "google-auth-library": "^9.14.1"
   }
 }
