@@ -32,7 +32,10 @@ mongoose
  
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: ['https://6jt4x4-5173.csb.app', 'https://lancepoint.vercel.app']
+  credentials: true // This allows cookies to be sent
+}));
 
  
 app.use("/api", routes);
